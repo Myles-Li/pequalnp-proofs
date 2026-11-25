@@ -5,9 +5,9 @@ import PEqualNP.Defs
 -- The clean star construction is due to willakone in L5735 and builds on L1003.
 -- Both source contributions are used under the repository's Apache-2.0 license.
 
-namespace PEqualNP.Outside.L_meta_5733
+open PEqualNP.MetaComplexity PEqualNP.CircuitLowerBounds
 
-open _root_.PEqualNP.MetaComplexity _root_.PEqualNP.CircuitLowerBounds
+namespace PEqualNP.Outside.L_meta_5733
 
 section Dependency0
 
@@ -5753,7 +5753,6 @@ theorem exists_min_cover (n : ℕ) (G : SimpleGraph (Fin n)) :
 
 end CleanStars
 
-open _root_.PEqualNP.CircuitLowerBounds _root_.PEqualNP.MetaComplexity
 open scoped Sym2
 
 private def edgeFunction {n : ℕ} (G : SimpleGraph (Fin n)) [DecidableRel G.Adj] (x : Fin n → Bool) : Bool :=
@@ -5790,7 +5789,7 @@ private def standardEdge {n : ℕ} (σ : Fin n ≃ Fin n) (i : Fin n) : Sym2 (Fi
 private def cycleCover {n : ℕ} (σ : Fin n ≃ Fin n) : Finset (Fin n) :=
   Finset.univ.image fun j : Fin ((n+1)/2) => σ.symm ⟨2*j.val,by have := j.isLt; omega⟩
 
-private theorem evenCovered {n : ℕ} (σ : Fin n ≃ Fin n) (u : Fin n) (h : (σ u).val%2=0) :
+private theorem evenCovered {n : ℕ} (σ : Fin n ≃ Fin n) (u : Fin n) (h : (σ u).val % 2 = 0) :
     u ∈ cycleCover σ := by
   let j : Fin ((n+1)/2) := ⟨(σ u).val/2,by have := (σ u).isLt; omega⟩
   refine Finset.mem_image.mpr ⟨j,Finset.mem_univ _,?_⟩
@@ -5802,7 +5801,7 @@ private theorem evenCovered {n : ℕ} (σ : Fin n ≃ Fin n) (u : Fin n) (h : (�
 
 private theorem adjacentCovered {n : ℕ} (σ : Fin n ≃ Fin n) (u v : Fin n)
     (step : ((σ u).val+1)%n = (σ v).val) : u ∈ cycleCover σ ∨ v ∈ cycleCover σ := by
-  by_cases h : (σ u).val%2=0
+  by_cases h : (σ u).val % 2 = 0
   · exact Or.inl (evenCovered σ u h)
   · right
     apply evenCovered σ v
